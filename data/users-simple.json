@@ -1,0 +1,23 @@
+[
+{
+    "firstName": "Christian",
+    "lastName": "Bale",
+    "birthDate": "1974-01-30",
+    "city": "Haverfordwest",
+    "country": "Reino Unido",
+    "email": "chirstianbale@gmail.com",
+    "password": "im_batman",
+    "confirmPassword": "im_batman"
+  },
+  
+  {
+    "firstName": "Jennifer",
+    "lastName": "Lawrence",
+    "birthDate": "1990-08-15",
+    "city": "Indian Hills",
+    "country": "EUA",
+    "email": "jenniferlawrence@gmail.com",
+    "password": "threefingergesture",
+    "confirmPassword": "threefingergesture"
+  }
+]
