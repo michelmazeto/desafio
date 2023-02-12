@@ -1,5 +1,5 @@
 [
-{
+  {
     "firstName": "Christian",
     "lastName": "Bale",
     "birthDate": "1974-01-30",
@@ -9,7 +9,6 @@
     "password": "im_batman",
     "confirmPassword": "im_batman"
   },
-  
   {
     "firstName": "Jennifer",
     "lastName": "Lawrence",
