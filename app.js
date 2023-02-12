@@ -3,6 +3,8 @@ const morgan = require('morgan');
 
 const app = express();
 
+app.use(express.json());
+
 const eventRouter = require('./routes/eventRoutes');
 // const userRouter = require('./routes/userRoutes');
 
