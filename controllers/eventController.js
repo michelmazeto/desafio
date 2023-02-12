@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const events = JSON.parse(
+let events = JSON.parse(
     fs.readFileSync(`${__dirname}/../data/events-simple.json`)
 );
 
@@ -19,8 +19,13 @@ exports.getAllEvents = (req, res) => {
 }
 
 exports.createEvent = (req, res) => {
-    const newId = events[events.length - 1].id + 1;
-    const newEvent = Object.assign({ id: newId }, req.body);
+    const newId = events[events.length - 1]._id + 1;
+    const newEvent = {
+        id: newId,
+        description: req.body.description,
+        dateTime: req.body.dateTime,
+        createdAt: req.body.createdAt
+    };
 
     events.push(newEvent);
 
@@ -28,68 +33,122 @@ exports.createEvent = (req, res) => {
         `${__dirname}/data/events-simple.json`,
         JSON.stringify(events),
         err => {
-            res.status(201).json({
-                status: 'sucess',
-                data: {
-                    event: newEvent
-                }
-            });
+            if (err) {
+                res.status(500).json({
+                    status: 'error',
+                    message: 'Ocorreu um erro ao criar o evento'
+                });
+            } else {
+                res.status(201).json({
+                    status: 'sucess',
+                    data: {
+                        event: newEvent
+                    }
+                });
+            }
         }
     );
 };
 
 // ID
 
-exports.deleteEventId = (req, res) => {
-    if (req.params.id * 1 > events.length) return res.status(404).json({
+exports.deleteEventById = (req, res) => {
+    const id = req.params.id * 1;
+    
+    const event = events.find(el => el._id === id);
+    if (event === -1) return res.status(404).json({
         status: 'fail',
         message: 'Invalid ID'
     });
 
+    events.splice(event, 1);
+
     res.status(204).json({
-        status: 'sucess',
+        status: 'success',
         data: null
     });
 };
 
-exports.getEventId = (req, res) => {
+exports.getEventById = (req, res) => {
     console.log(req.params);
-    const id = req.params.id * 1;
+    
+    const id = req.params.id;
 
-    if (id > events.length) return res.status(404).json({
+    const event = events.find(el => el._id === id);
+
+    if (!event) return res.status(404).json({
         status: 'fail',
         message: 'Invalid ID'
     });
 
-    const event = events.find(el => el.id === id);
-
     res.status(200).json({
-        status: 'sucess',
+        status: 'success',
         data: {
             event
         }
     });
-};
+}
 
-/*
-// DIA DA SEMANA
-
-exports.getEventWeek = (req, res) => {
-    console.log(req.params);
-    const day = req.params.day;
-
-    const event = events.find(el => el.day === day);
-
-    if (!event) return res.status(404).json({
+//DIA DA SEMANA
+exports.getEventsByDay = (req, res) => {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const requestedDay = req.params.day;
+  
+    if (!daysOfWeek.includes(requestedDay)) {
+      return res.status(404).json({
         status: 'fail',
         message: 'Invalid day'
+      });
+    }
+  
+    const eventsByDay = events.filter(event => {
+      const eventDay = new Date(event.dateTime).toLocaleDateString('en-US', { weekday: 'long' });
+      return eventDay === requestedDay;
     });
-
+  
+    if (!eventsByDay.length) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'No events found for that day'
+      });
+    }
+  
     res.status(200).json({
-        status: 'sucess',
-        data: {
-            event
-        }
+      status: 'success',
+      data: {
+        eventsByDay
+      }
+    });
+  };
+
+  exports.deleteEventByDay = (req, res) => {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const requestedDay = req.params.day;
+  
+    if (!daysOfWeek.includes(requestedDay)) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Invalid day'
+      });
+    }
+  
+    const eventsToRemove = events.filter(event => {
+      const eventDay = new Date(event.dateTime).toLocaleDateString('en-US', { weekday: 'long' });
+      return eventDay === requestedDay;
+    });
+  
+    if (!eventsToRemove.length) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'No events found for that day'
+      });
+    }
+  
+    events = events.filter(event => !eventsToRemove.includes(event));
+  
+    res.status(204).json({
+      status: 'success',
+      data: null
     });
 };
-*/
+

@@ -8,14 +8,14 @@ router
    .get(eventController.getAllEvents)
    .post(eventController.createEvent);
 
-router
+   router
    .route('/:id')
-   .get(eventController.getEventId)
-   .delete(eventController.deleteEventId);
-
-router
-    .route('/:weekDay')
-    .get(eventController.getEventWeek)
-    .delete(eventController.getEventWeek);
+   .get(eventController.getEventById)
+   .delete(eventController.deleteEventById);
+ 
+ router
+   .route('/week/:day')
+   .get(eventController.getEventsByDay)
+   .delete(eventController.deleteEventByDay);
 
 module.exports = router;
