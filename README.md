@@ -29,7 +29,7 @@
 <pre><code>https://nodejs.org/en/</code></pre>
 <h3>Clonando e rodando</h3>
 <p>No seu terminal, clone o projeto:</p>
-<pre><code>git clone MEULINK</code></pre>
+<pre><code>git clone https://github.com/michelmazeto/desafio.git</code></pre>
 <p>Acesse a raiz do projeto:</p>
 <pre><code>cd desafio</code></pre>
 <p>Instale as dependências:</p>
